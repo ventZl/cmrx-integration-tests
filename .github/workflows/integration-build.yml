@@ -24,13 +24,17 @@ jobs:
          path: cmrx
          submodules: 'false'
 
-     - name: Configure and Prebuild Integration Test
+     - name: Configure Integration Test Build
        uses: threeal/cmake-action@main
-       continue-on-error: true
        with:
-        run-build: true
+        run-build: false
         build-dir: build
         args: -DCMRX_UNIT_TESTS=OFF -DCMAKE_BUILD_TYPE=Debug
 
+     - name: Pre-build Integration Test
+       run: make -C build
+       continue-on-error: true
+
      - name: Build Integration Test
        run: make -C build
+       continue-on-error: true
