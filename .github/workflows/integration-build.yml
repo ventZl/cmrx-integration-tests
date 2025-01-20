@@ -28,10 +28,9 @@ jobs:
        uses: threeal/cmake-action@main
        continue-on-error: true
        with:
-        generator: Ninja
         run-build: true
         build-dir: build
         args: -DCMRX_UNIT_TESTS=OFF -DCMAKE_BUILD_TYPE=Debug
 
      - name: Build Integration Test
-       run: ninja -C build
+       run: make -C build
