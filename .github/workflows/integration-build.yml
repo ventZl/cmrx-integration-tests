@@ -1,4 +1,4 @@
-name: 'Build: stm2h7'
+name: 'Build: stm32h7'
 on:
   push:
     branches: [ master ]
@@ -28,6 +28,7 @@ jobs:
        uses: threeal/cmake-action@main
        with:
         run-build: false
+        source-dir: stm32h7-cubemx
         build-dir: build
         args: -DCMRX_UNIT_TESTS=OFF -DCMAKE_BUILD_TYPE=Debug
 
