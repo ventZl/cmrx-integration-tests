@@ -1,4 +1,4 @@
-name: Build: stm2h7
+name: 'Build: stm2h7'
 on:
   push:
     branches: [ master ]
