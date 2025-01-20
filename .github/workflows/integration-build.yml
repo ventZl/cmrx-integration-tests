@@ -14,7 +14,7 @@ jobs:
      - name: Checkout Test Sources
        uses: actions/checkout@v4.1.6
        with:
-         repository: ventZl/cmrx-integration-build
+         repository: ventZl/cmrx-integration-tests
          submodules: 'false'
 
      - name: Checkout Latest CMRX Kernel
