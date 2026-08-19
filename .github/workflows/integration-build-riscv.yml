@@ -1,0 +1,55 @@
+name: 'Build: rp2350-riscv'
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build-project:
+    runs-on: ubuntu-latest
+    env:
+      PICO_SDK_PATH: ${{ github.workspace }}/pico-sdk
+      PICO_BOARD: pico2
+      PICO_PLATFORM: rp2350-riscv
+    steps:
+     - name: Prepare Cross-Toolchain Environment
+       run: |
+         curl -fsSL -o riscv-toolchain.tar.gz \
+           https://github.com/raspberrypi/pico-sdk-tools/releases/download/v2.3.0-1/riscv-toolchain-16-x86_64-lin.tar.gz
+         mkdir -p riscv-toolchain
+         tar -xzf riscv-toolchain.tar.gz -C riscv-toolchain
+         echo "${{ github.workspace }}/riscv-toolchain/bin" >> "$GITHUB_PATH"
+
+     - name: Checkout Pico SDK
+       uses: actions/checkout@v4.1.6
+       with:
+         repository: raspberrypi/pico-sdk
+         path: pico-sdk
+         submodules: 'recursive'
+
+     - name: Checkout Test Sources
+       uses: actions/checkout@v4.1.6
+       with:
+         repository: ventZl/cmrx-integration-tests
+         submodules: 'false'
+
+     - name: Checkout Latest CMRX Kernel
+       uses: actions/checkout@v4.1.6
+       with:
+         repository: ventZl/cmrx
+         path: rp2350-pico-sdk-riscv/cmrx
+         submodules: 'false'
+
+     - name: Configure Integration Test Build
+       uses: threeal/cmake-action@main
+       with:
+        run-build: false
+        source-dir: rp2350-pico-sdk-riscv
+        build-dir: build
+        args: -DCMRX_UNIT_TESTS=OFF -DCMAKE_BUILD_TYPE=Debug
+
+     - name: Build Integration Test
+       run: make -C build
+       # The RISC-V port is still stabilizing; keep the build non-gating
+       # for now, matching integration-build.yml's stm32h7 job.
+       continue-on-error: true

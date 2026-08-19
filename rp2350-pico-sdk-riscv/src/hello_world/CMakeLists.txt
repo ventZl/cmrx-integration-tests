@@ -1,0 +1,3 @@
+set(hello_world_SRCS hello_world.c)
+add_application(hello_world ${hello_world_SRCS})
+target_link_libraries(hello_world pico_stdlib_headers hardware_gpio_headers hardware_riscv_headers)
